@@ -24,7 +24,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Setup Emacs
-        uses: purcell/setup-emacs@8415786a52b3a84babd7ffc92a802b06e3780c17
+        uses: purcell/setup-emacs@509bfe03ba1ffddb67b3c6d9eaaeb96b45182cc7
         with:
           version: ${{ matrix.emacs-version }}
       - name: Test
