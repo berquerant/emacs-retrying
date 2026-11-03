@@ -20,7 +20,7 @@ jobs:
           - "27.1"
     steps:
       - name: Checkout
-        uses: actions/checkout@v6.0.3
+        uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
       - name: Setup Emacs
