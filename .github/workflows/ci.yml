@@ -8,24 +8,20 @@ on:
       - main
   pull_request:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
 jobs:
-  build:
-    timeout-minutes: 1
+  actions-lock-verify:
     permissions:
-      contents: read
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        emacs-version:
-          - "27.1"
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6.0.3
-        with:
-          persist-credentials: false
-      - name: Setup Emacs
-        uses: purcell/setup-emacs@509bfe03ba1ffddb67b3c6d9eaaeb96b45182cc7
-        with:
-          version: ${{ matrix.emacs-version }}
-      - name: Test
-        run: bin/test.sh
+      contents: read # checkout repository to verify actions.lock
+    uses: berquerant/reusable-workflows/.github/workflows/actions-lock-verify.yml@v0.9.1
+
+  ci:
+    permissions:
+      contents: read # checkout repository for Emacs CI
+    uses: berquerant/reusable-workflows/.github/workflows/emacs-ci.yml@v0.9.1
+    with:
+      emacs-versions: "27.1"
+      test-command: bin/test.sh
